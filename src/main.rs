@@ -1,4 +1,5 @@
 mod core;
+mod gfx;
 
 use std::error::Error;
 use winit::dpi::LogicalSize;
@@ -7,11 +8,16 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder};
 
 fn main() -> Result<(), Box<dyn Error>> {
+    env_logger::init();
+
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title("Thermite")
         .with_inner_size(LogicalSize::new(800,600))
         .build(&event_loop)?;
+
+    log::debug!("Created window");
+    log::debug!("Starting event loop");
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
