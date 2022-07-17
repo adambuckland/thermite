@@ -1,7 +1,6 @@
 use std::error;
-use std::fmt::{Debug, Display, Formatter, Write};
+use std::fmt::{Debug, Display, Formatter};
 use ash::{LoadingError, vk};
-use crate::core::error::Error::{RendererError, VulkanError};
 
 #[derive(Debug)]
 pub enum Error {
@@ -38,12 +37,12 @@ impl error::Error for Error {
 
 impl From<ash::vk::Result> for Error {
     fn from(result: ash::vk::Result) -> Self {
-        VulkanError(result)
+        Error::VulkanError(result)
     }
 }
 
 impl From<ash::LoadingError> for Error {
     fn from(le: LoadingError) -> Self {
-        RendererError(le)
+        Error::RendererError(le)
     }
 }

@@ -1,4 +1,6 @@
-mod core;
+extern crate core;
+
+mod kernel;
 mod gfx;
 
 use std::error::Error;

@@ -1,11 +1,9 @@
 mod utils;
 
-use std::ffi::{CStr, CString};
-use std::os::raw::c_char;
-use ash::{Entry, Instance, LoadingError, vk};
-use ash::extensions::khr::GetPhysicalDeviceProperties2;
-use ash::vk::{ApplicationInfo, InstanceCreateInfo, MAX_PHYSICAL_DEVICE_NAME_SIZE};
-use crate::core::error::Error;
+use crate::kernel::error::Error;
+use std::ffi::{CStr};
+use ash::{vk};
+use ash::vk::{ApplicationInfo, InstanceCreateInfo};
 
 pub struct VulkanBackend {
     instance: ash::Instance,
@@ -44,15 +42,24 @@ pub fn create_instance() -> Result<VulkanBackend, Error> {
 }
 
 impl VulkanBackend {
-    pub fn print_devices(&self) {
-        let devices = unsafe {self.instance.enumerate_physical_devices().unwrap()};
+    pub fn print_devices(&self) -> Option<Vec<String>> {
+        println!("print_device!");
+        let devices = match unsafe {self.instance.enumerate_physical_devices() } {
+            Ok(devices) => devices,
+            Err(e) => {
+                eprintln!("ERR: {:?}", e);
+                return None
+            }
+        };
+        println!("enumerate devices");
         let names: Vec<String> = devices.iter().map(|device| unsafe {
                 let props = self.instance.get_physical_device_properties(*device);
-                let raw = unsafe { CStr::from_ptr(props.device_name.as_ptr())};
+                let raw = CStr::from_ptr(props.device_name.as_ptr());
                 raw.to_str().unwrap().to_string()
             })
             .collect();
         println!("{:#?}", names);
+        Some(names)
     }
 }
 
