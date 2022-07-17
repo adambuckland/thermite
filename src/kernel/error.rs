@@ -1,8 +1,6 @@
-use std::any::TypeId;
 use std::error;
 use std::fmt::{Debug, Display, Formatter, Write};
 use ash::{LoadingError, vk};
-use ash::vk::Result;
 use crate::core::error::Error::{RendererError, VulkanError};
 
 #[derive(Debug)]
