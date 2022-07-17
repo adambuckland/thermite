@@ -6,6 +6,7 @@ use winit::dpi::LogicalSize;
 use winit::event::{Event, ElementState, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{WindowBuilder};
+use crate::gfx::vulkan::create_instance;
 
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
@@ -18,6 +19,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     log::debug!("Created window");
     log::debug!("Starting event loop");
+
+    let instance = create_instance()?;
+    instance.print_devices();
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
